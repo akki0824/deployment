@@ -2,7 +2,7 @@ pipeline{
     agent any
     parameters{
         choice(name: 'action', choices: 'deploy\nstopdeployment', description: 'starts or stops deployments')
-        string(name: 'cluster_name', defaultValue: 'dev-cluster' )
+        string(name: 'cluster_name', defaultValue: 'eks-dev-cluster-new' )
         string(name: 'region', defaultValue: 'ap-south-1' )
         string(name: 'profile', defaultValue: 'dps_devops' )
 
