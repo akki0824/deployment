@@ -1,0 +1,49 @@
+pipeline{
+    agent any
+    parameters{
+        choice(name: 'action', choices: 'deploy\nstopdeployment', description: 'starts or stops deployments')
+        string(name: 'cluster_name', defaultValue: 'dev-cluster' )
+        string(name: 'region', defaultValue: 'ap-south-1' )
+        string(name: 'profile', defaultValue: 'dps_devops' )
+
+
+    }
+    stages{
+        stage('Checkout'){
+            steps{
+                //git branch: 'master', url: 'https://github.com/akki0824/spring-boot'
+            }
+        }
+        stage('EKS login'){
+            steps{
+                script{withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
+                {
+        sh "aws eks update-kubeconfig --name ${params.cluster_name} --region ${params.region} --profile ${params.profile}"
+                }
+                }
+            }
+        }
+
+        stage('Deployment Based on confirmation'){
+            when { expression { params.action == 'deploy' }}
+            steps{
+                script{
+                    def apply = false
+                    try{ //if you start deployment asks for confirm and proceeds with apply variable
+                        input message: 'please confirm to initiate deployments', ok: 'ready to deploy yamls'
+                        apply = true
+                    } //if user neglected catch(err) is to not fail the pipeline 
+                    catch(err){
+                        apply = false 
+                        CurrentBuild.result= 'UNSTABLE'
+                    }
+                    if(apply){
+                        sh """
+                        kubectl apply -f .
+                        """;
+                    }
+                }
+            }
+        }
+    }
+}
