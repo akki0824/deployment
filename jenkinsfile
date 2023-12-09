@@ -18,11 +18,11 @@ pipeline{
             steps{
                 script{withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
                 {
-        sh "aws eks update-kubeconfig --name ${params.cluster_name} --region ${params.region} --profile ${params.profile}"
+        sh "aws eks update-kubeconfig --name ${params.cluster_name} --region ${params.region}"
                 }
                 }
             }
-        }
+        } //--profile ${params.profile}
 
         stage('Deployment Based on confirmation'){
             when { expression { params.action == 'deploy' }}
