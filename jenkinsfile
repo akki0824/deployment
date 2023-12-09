@@ -28,7 +28,6 @@ pipeline{
             when { expression { params.action == 'deploy' }}
             steps{
                 script{
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
                     def apply = false
                     try{ //if you start deployment asks for confirm and proceeds with apply variable
                         input message: 'please confirm to initiate deployments', ok: 'ready to deploy yamls'
