@@ -11,7 +11,7 @@ pipeline{
     stages{
         stage('Checkout'){
             steps{
-                //git branch: 'master', url: 'https://github.com/akki0824/spring-boot'
+                git branch: 'master', url: 'https://github.com/akki0824/deployment'
             }
         }
         stage('EKS login'){
