@@ -50,7 +50,10 @@ pipeline{
                     }
                     if(apply){
                         sh """
-                        kubectl apply -f .
+        aws configure set aws_accces_key_id "$ACCESS_KEY"
+        aws configure set aws_secret_access_key "$SECRET_KEY"
+        aws configure set region ""
+        kubectl apply -f .
                         """;
                     }
                 }
