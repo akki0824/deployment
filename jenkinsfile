@@ -8,6 +8,11 @@ pipeline{
 
 
     }
+    environment{
+        ACCESS_KEY = credentials(aws_accces_key_id)
+        SECRET_KEY = credentials(aws_secret_access_key)
+
+    }
     stages{
         stage('Checkout'){
             steps{
@@ -18,7 +23,11 @@ pipeline{
             steps{
                 script{withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
                 {
-        sh """ 
+        sh """
+        aws configure set aws_accces_key_id "$ACCESS_KEY"
+        aws configure set aws_secret_access_key "$SECRET_KEY"
+        aws configure set region ""
+
         aws eks update-kubeconfig --name ${params.cluster_name} --region ${params.region}
         """;
                 }
@@ -26,26 +35,26 @@ pipeline{
             }
         } //--profile ${params.profile}
 
-        stage('Deployment Based on confirmation'){
-            when { expression { params.action == 'deploy' }}
-            steps{
-                script{
-                    def apply = false
-                    try{ //if you start deployment asks for confirm and proceeds with apply variable
-                        input message: 'please confirm to initiate deployments', ok: 'ready to deploy yamls'
-                        apply = true
-                    } //if user neglected catch(err) is to not fail the pipeline 
-                    catch(err){
-                        apply = false 
-                        CurrentBuild.result= 'UNSTABLE'
-                    }
-                    if(apply){
-                        sh """
-                        kubectl apply -f .
-                        """;
-                    }
-                }
-            }
-        }
+        // stage('Deployment Based on confirmation'){
+        //     when { expression { params.action == 'deploy' }}
+        //     steps{
+        //         script{
+        //             def apply = false
+        //             try{ //if you start deployment asks for confirm and proceeds with apply variable
+        //                 input message: 'please confirm to initiate deployments', ok: 'ready to deploy yamls'
+        //                 apply = true
+        //             } //if user neglected catch(err) is to not fail the pipeline 
+        //             catch(err){
+        //                 apply = false 
+        //                 CurrentBuild.result= 'UNSTABLE'
+        //             }
+        //             if(apply){
+        //                 sh """
+        //                 kubectl apply -f .
+        //                 """;
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
