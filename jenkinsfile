@@ -22,16 +22,16 @@ pipeline{
                 script{withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-test-cred', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
                 {
         sh """
-        aws configure set aws_accces_key_id '$ACCESS_KEY_ACCESS_KEY_ID'
-        aws configure set aws_secret_access_key '$ACCESS_KEY_SECRET_ACCESS_KEY'
-        aws configure set region ""
-
         aws eks update-kubeconfig --name ${params.cluster_name} --region ${params.region}
         """;
                 }
                 }
             }
-        } //--profile ${params.profile}
+        }         // aws configure set aws_accces_key_id '$ACCESS_KEY_ACCESS_KEY_ID'
+        // aws configure set aws_secret_access_key '$ACCESS_KEY_SECRET_ACCESS_KEY'
+        // aws configure set region ""
+
+//--profile ${params.profile}
 
         stage('Deployment Based on confirmation'){
             when { expression { params.action == 'deploy' }}
