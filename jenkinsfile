@@ -2,7 +2,7 @@ pipeline{
     agent any
     parameters{
         choice(name: 'action', choices: 'deploy\nstopdeployment', description: 'starts or stops deployments')
-        string(name: 'cluster_name', defaultValue: 'EKS-Deployment' )
+        string(name: 'cluster_name', defaultValue: 'EKS-deployment' )
         string(name: 'region', defaultValue: 'us-east-1' )
         string(name: 'profile', defaultValue: 'test' )
 
@@ -29,7 +29,9 @@ pipeline{
             }
         }         // aws configure set aws_accces_key_id '$ACCESS_KEY_ACCESS_KEY_ID'
         // aws configure set aws_secret_access_key '$ACCESS_KEY_SECRET_ACCESS_KEY'
-        // aws configure set region ""
+        // aws configure set region ""         aws configure "$ACCESS_KEY"
+        //aws configure "$SECRET_KEY"
+        //aws configure set region ""
 
 //--profile ${params.profile}
 
@@ -48,10 +50,7 @@ pipeline{
                     }
                     if(apply){
                         sh """
-        aws configure "$ACCESS_KEY"
-        aws configure "$SECRET_KEY"
-        aws configure set region ""
-        kubectl apply -f .
+                         kubectl apply -f .
                         """;
                     }
                 }
