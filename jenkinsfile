@@ -24,8 +24,8 @@ pipeline{
                 script{withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-cred', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
                 {
         sh """
-        aws configure set aws_accces_key_id "$ACCESS_KEY"
-        aws configure set aws_secret_access_key "$SECRET_KEY"
+        aws configure set aws_accces_key_id '$ACCESS_KEY'
+        aws configure set aws_secret_access_key '$SECRET_KEY'
         aws configure set region ""
 
         aws eks update-kubeconfig --name ${params.cluster_name} --region ${params.region}
@@ -50,8 +50,8 @@ pipeline{
                     }
                     if(apply){
                         sh """
-        aws configure set aws_accces_key_id "$ACCESS_KEY"
-        aws configure set aws_secret_access_key "$SECRET_KEY"
+        aws configure "$ACCESS_KEY"
+        aws configure "$SECRET_KEY"
         aws configure set region ""
         kubectl apply -f .
                         """;
