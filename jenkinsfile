@@ -8,11 +8,9 @@ pipeline{
 
 
     }
-    // environment{
-    //     ACCESS_KEY = credentials('aws_accces_key_id')
-    //     SECRET_KEY = credentials('aws_secret_access_key')
-
-    // }
+    environment{
+        ACCESS_KEY = credentials('aws-test-cred')
+ }
     stages{
         stage('Checkout'){
             steps{
@@ -24,8 +22,8 @@ pipeline{
                 script{withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-test-cred', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']])
                 {
         sh """
-        aws configure set aws_accces_key_id '$ACCESS_KEY_ID'
-        aws configure set aws_secret_access_key '$AWS_SECRET_ACCESS_KEY'
+        aws configure set aws_accces_key_id '$ACCESS_KEY_ACCESS_KEY_ID'
+        aws configure set aws_secret_access_key '$ACCESS_KEY_SECRET_ACCESS_KEY'
         aws configure set region ""
 
         aws eks update-kubeconfig --name ${params.cluster_name} --region ${params.region}
