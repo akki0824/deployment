@@ -56,5 +56,25 @@ pipeline{
                 }
             }
         }
+        stage('Stage 2') {
+            steps {
+                script {
+                    try {
+                        // Your stage 2 steps here
+                    } catch (Exception e) {
+                        currentBuild.result = 'FAILURE'
+                        echo "Stage 2 failed! Sending email notification..."
+                        emailext (
+                            subject: "Jenkins Notification",
+                            body: "Stage 2 failed in ${env.JOB_NAME} build #${env.BUILD_NUMBER}\n\n${BUILD_URL}",
+                            to: 'thoutamakhilsai1997@gmail.com',
+                            mimeType: 'text/html'
+                        )
+                        // Throw the exception to mark the build as failed
+                        throw e
+                    }
+                }
+            }
+        }
     }
 }
