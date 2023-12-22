@@ -9,7 +9,7 @@ pipeline{
 
     }
     environment{
-        ACCESS_KEY = credentials('aws-test-cred')
+        ACCESS_KEY = credentials('aws-cred')
  }
     stages{
         stage('Checkout'){
