@@ -2,9 +2,9 @@ pipeline{
     agent any
     parameters{
         choice(name: 'action', choices: 'deploy\nstopdeployment', description: 'starts or stops deployments')
-        string(name: 'cluster_name', defaultValue: 'EKS-deployment' )
-        string(name: 'region', defaultValue: 'us-east-1' )
-        string(name: 'profile', defaultValue: 'test' )
+        string(name: 'cluster_name', defaultValue: 'eks-prod-cluster' )
+        string(name: 'region', defaultValue: 'ap-south-1' )
+        string(name: 'profile', defaultValue: 'dps_devops' )
 
 
     }
@@ -27,11 +27,7 @@ pipeline{
                 }
                 }
             }
-        }         // aws configure set aws_accces_key_id '$ACCESS_KEY_ACCESS_KEY_ID'
-        // aws configure set aws_secret_access_key '$ACCESS_KEY_SECRET_ACCESS_KEY'
-        // aws configure set region ""         aws configure "$ACCESS_KEY"
-        //aws configure "$SECRET_KEY"
-        //aws configure set region ""
+        }
 
 //--profile ${params.profile}
 
@@ -56,25 +52,5 @@ pipeline{
                 }
             }
         }
-        // stage('Stage 2') {
-        //     steps {
-        //         script {
-        //             try {
-        //                 // Your stage 2 steps here
-        //             } catch (Exception e) {
-        //                 currentBuild.result = 'FAILURE'
-        //                 echo "Stage 2 failed! Sending email notification..."
-        //                 emailext (
-        //                     subject: "Jenkins Notification",
-        //                     body: "Stage 2 failed in ${env.JOB_NAME} build #${env.BUILD_NUMBER}\n\n${BUILD_URL}",
-        //                     to: 'thoutamakhilsai1997@gmail.com',
-        //                     mimeType: 'text/html'
-        //                 )
-        //                 // Throw the exception to mark the build as failed
-        //                 throw e
-        //             }
-        //         }
-        //     }
-        // }
     }
 }
